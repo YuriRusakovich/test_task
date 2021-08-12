@@ -1,54 +1,66 @@
 import React from "react";
+
 import { createStyles, makeStyles } from '@material-ui/core/styles';
+
+import TaskItem from "../../cards/taskItem/taskItem";
+
+import CompareDatesService from
+    "../../../services/compareDatesService/compareDates.service";
+import { List } from "@material-ui/core";
+
+interface Props {
+    tasks: Task[];
+    deleteTask: DeleteTask;
+    updateTask: UpdateTask;
+}
 
 const useStyles = makeStyles(() =>
     createStyles({
-        container: {
-            display: 'flex',
-            justifyContent: 'center',
-            marginTop: '30px',
-            flexDirection: 'column',
-        },
         wrapper: {
             display: 'flex',
-            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        listWrapper: {
+            marginTop: '30px',
+            position: 'relative',
+            overflowY: 'scroll',
+            maxHeight: '500px',
+            '&::-webkit-scrollbar': {
+                width: '0.4em'
+            },
+            '&::-webkit-scrollbar-track': {
+                boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+                webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)'
+            },
+            '&::-webkit-scrollbar-thumb': {
+                backgroundColor: 'rgba(0,0,0,.1)',
+                borderRadius: '4px',
+            }
         }
     }),
 );
 
-type FormData = {
-    id: number,
-    taskName: string,
-    taskDescription: string,
-    currentDate: string,
-}
-
-const TasksList: React.FC = () => {
+const TasksList: React.FC<Props> = ({tasks, deleteTask, updateTask}) => {
     const classes = useStyles();
 
-    let tasks: FormData[] = JSON
-        .parse(localStorage.getItem('Tasks') || '[]');
-
-    React.useEffect(() => {
-        document.addEventListener('taskAdded', () => {
-            tasks = JSON
-                .parse(localStorage.getItem('Tasks') || '[]');
+    const tasksList = tasks.sort(CompareDatesService.compareTasks)
+        .map((task: Task) => {
+            return (
+                <TaskItem
+                    key={task.id}
+                    task={task}
+                    deleteTask={deleteTask}
+                    updateTask={updateTask}
+                />
+            );
         });
-    }, []);
-
-    const tasksList = tasks.map((task: FormData) => {
-        return (
-            <li key={task.id}>
-                {task.taskName}
-            </li>
-        );
-    });
 
     return (
-        <div className={classes.container}>
-            <ul>
+        <div className={classes.wrapper}>
+            <List className={classes.listWrapper}>
                 {tasksList}
-            </ul>
+            </List>
         </div>
     );
 };

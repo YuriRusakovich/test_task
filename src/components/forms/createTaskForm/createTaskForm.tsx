@@ -1,20 +1,26 @@
-import React from "react";
+import React, {useState} from "react";
+import { useForm } from "react-hook-form";
+
 import { Button, TextField } from "@material-ui/core";
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 
-import { useForm } from "react-hook-form";
-import moment from "moment";
+import { format } from "date-fns";
 
-type FormData = {
-    id: number,
-    taskName: string,
-    taskDescription: string,
-    currentDate: string,
+import LocalstorageService from
+    "../../../services/localStorageService/localstorage.service";
+
+interface Props {
+    addTask: AddTask;
 }
 
 const useStyles = makeStyles(() =>
     createStyles({
         form: {
+            display: 'flex',
+            justifyContent: 'center',
+            paddingTop: '40px'
+        },
+        createButton: {
             display: 'flex',
             justifyContent: 'center',
             paddingTop: '40px'
@@ -28,63 +34,100 @@ const useStyles = makeStyles(() =>
         wrapper: {
             display: 'flex',
             flexDirection: 'column',
+        },
+        error: {
+            padding: '5px 15px',
+            color: 'red'
         }
     }),
 );
 
-const CreateTaskForm: React.FC = () => {
+const CreateTaskForm: React.FC<Props> = ({addTask}) => {
     const classes = useStyles();
 
-    let id: number = parseInt(localStorage
-        .getItem('currentId') || '0');
+    const [showForm, setShowForm] = useState(false);
 
-    const tasks: FormData[] = JSON.parse(localStorage.getItem('Tasks') || '[]');
+    let id: number = LocalstorageService.getCurrentId();
 
-    const { register, handleSubmit, reset } = useForm<FormData>();
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: {errors}
+    } = useForm<Task>();
 
-    const onSubmit = handleSubmit((data: FormData) => {
-        const event = new Event('taskAdded');
-
+    const onSubmit = handleSubmit((data: Task) => {
         id++;
-        data.currentDate = moment(new Date())
-            .format('MMMM D YYYY, h:mm:ss');
-        tasks.push(data);
-        localStorage.setItem('Tasks', JSON.stringify(tasks));
-        localStorage.setItem('currentId', id.toString());
-        document.dispatchEvent(event);
+        data.id = id;
+        data.createdAt = format(new Date(), 'd-MM-yyyy, HH:mm:ss');
+        LocalstorageService.setCurrentId(id);
+        addTask(data);
         reset();
+        setShowForm(false);
     });
 
+    const changeShowForm: Void = () => {
+        setShowForm(true);
+    };
+
     return (
-        <form className={classes.form} onSubmit={onSubmit} autoComplete="off">
-            <div className={classes.wrapper}>
-                <TextField
-                    id="taskName"
-                    {...register("taskName")}
-                    label="Task Name"
-                    variant="outlined"
-                    size="small"
-                    required
-                />
-                <TextField
-                    id="taskDescription"
-                    {...register("taskDescription")}
-                    label="Task Description"
-                    className={classes.textArea}
-                    variant="outlined"
-                    multiline
-                    rows={2}
-                    required
-                />
-                <Button
-                    type='submit'
-                    className={classes.button}
-                    variant="contained"
-                    color="primary">
-                    Create task
-                </Button>
-            </div>
-        </form>
+        <>
+            {!showForm &&
+                <div className={classes.createButton}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={changeShowForm}>
+                        Add Task
+                    </Button>
+                </div>
+            }
+            {showForm &&
+            <form className={classes.form}
+                onSubmit={onSubmit}
+                autoComplete="off">
+                <div className={classes.wrapper}>
+                    <TextField
+                        id="taskName"
+                        {...register("taskName", {
+                            required: "This is required"
+                        })}
+                        label="Task Name"
+                        variant="outlined"
+                        size="small"
+                    />
+                    {errors.taskName &&
+                        <span className={classes.error}>
+                            {errors.taskName.message}
+                        </span>
+                    }
+                    <TextField
+                        id="taskDescription"
+                        {...register("taskDescription", {
+                            required: "This is required"
+                        })}
+                        label="Task Description"
+                        className={classes.textArea}
+                        variant="outlined"
+                        multiline
+                        rows={2}
+                    />
+                    {errors.taskDescription &&
+                        <span className={classes.error}>
+                            {errors.taskDescription.message}
+                        </span>
+                    }
+                    <Button
+                        type='submit'
+                        className={classes.button}
+                        variant="contained"
+                        color="primary">
+                        Create task
+                    </Button>
+                </div>
+            </form>
+            }
+        </>
     );
 };
 
