@@ -1,6 +1,6 @@
 import React from "react";
 
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import TaskItem from "../../cards/taskItem/taskItem";
 
@@ -14,7 +14,7 @@ interface Props {
     updateTask: UpdateTask;
 }
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme:Theme) =>
     createStyles({
         wrapper: {
             display: 'flex',
@@ -22,10 +22,10 @@ const useStyles = makeStyles(() =>
             justifyContent: 'center',
         },
         listWrapper: {
-            marginTop: '30px',
+            marginTop:  theme.spacing(4),
             position: 'relative',
             overflowY: 'scroll',
-            maxHeight: '500px',
+            maxHeight: 500,
             '&::-webkit-scrollbar': {
                 width: '0.4em'
             },

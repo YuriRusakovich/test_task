@@ -2,8 +2,8 @@ interface Task {
     id: number;
     taskName: string;
     taskDescription: string;
-    createdAt: string;
-    updatedAt?: string;
+    createdAt: Date;
+    updatedAt?: Date;
 }
 
 type AddTask = (task: Task) => void;

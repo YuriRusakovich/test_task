@@ -1,6 +1,13 @@
+import CheckDataService from '../checkDataService/checkData.service';
+
 class LocalstorageService {
     getTasks(): Task[] {
-        return JSON.parse(localStorage.getItem('Tasks') || '[]');
+        const data: string | null = localStorage.getItem('Tasks');
+        if (data !== null && CheckDataService.isTaskArray(JSON.parse(data))) {
+            return JSON.parse(data);
+        } else {
+            return [];
+        }
     }
 
     setTasks(tasks: Task[]): void {
@@ -8,7 +15,12 @@ class LocalstorageService {
     }
 
     getCurrentId(): number {
-        return parseInt(localStorage.getItem('currentId') || '0');
+        const data: string | null = localStorage.getItem('currentId');
+        if (data !== null && typeof JSON.parse(data) === 'number') {
+            return JSON.parse(data);
+        } else {
+            return 0;
+        }
     }
 
     setCurrentId(id: number): void {

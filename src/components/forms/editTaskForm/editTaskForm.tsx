@@ -2,40 +2,39 @@ import React from "react";
 import { useForm } from "react-hook-form";
 
 import { Button, TextField } from "@material-ui/core";
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-
-import { format } from "date-fns";
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 interface Props {
     task: Task;
     updateTask: UpdateTask;
 }
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme:Theme) =>
     createStyles({
         form: {
             display: 'flex',
             justifyContent: 'center',
-            paddingTop: '40px'
+            paddingTop: theme.spacing(5)
         },
         createButton: {
             display: 'flex',
             justifyContent: 'center',
-            paddingTop: '40px'
+            paddingTop: theme.spacing(5)
         },
         button: {
-            marginTop: '15px',
+            marginTop: theme.spacing(3),
         },
         textArea: {
-            marginTop: '15px',
+            marginTop: theme.spacing(3),
         },
         wrapper: {
             display: 'flex',
             flexDirection: 'column',
         },
         error: {
-            padding: '5px 15px',
-            color: 'red'
+            padding: theme.spacing(1, 4),
+            color: 'red',
+            maxWidth: 200
         }
     }),
 );
@@ -43,7 +42,16 @@ const useStyles = makeStyles(() =>
 const EditTaskForm: React.FC<Props> = ({task, updateTask}) => {
     const classes = useStyles();
 
-    const { register, handleSubmit, formState: {errors} } = useForm<Task>();
+    const { register,
+        handleSubmit,
+        formState: {errors},
+        setValue,
+    } = useForm<Task>({
+        defaultValues: {
+            taskName: task.taskName,
+            taskDescription: task.taskDescription
+        }
+    });
 
     const onSubmit = handleSubmit((data: Task) => {
         data.taskName = data.taskName ? data.taskName : task.taskName;
@@ -51,9 +59,18 @@ const EditTaskForm: React.FC<Props> = ({task, updateTask}) => {
             data.taskDescription : task.taskDescription;
         data.id = task.id;
         data.createdAt = task.createdAt;
-        data.updatedAt = format(new Date(), 'd-MM-yyyy, HH:mm:ss');
+        data.updatedAt = new Date();
         updateTask(data);
     });
+
+    const handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void =
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            if (event.target.name === 'taskName') {
+                setValue('taskName', event.target.value);
+            } else {
+                setValue('taskDescription', event.target.value);
+            }
+        };
 
     return (
         <form className={classes.form}
@@ -63,10 +80,16 @@ const EditTaskForm: React.FC<Props> = ({task, updateTask}) => {
                 <TextField
                     id="taskName"
                     {...register("taskName", {
-                        required: "This is required"
+                        required: "This is required",
+                        pattern: {
+                            value: /^[^\s]+(?:$|.*[^\s]+$)/,
+                            message: `Entered value can not start/end or 
+                                contain only white spacing`
+                        },
                     })}
                     label="Task Name"
                     defaultValue={task.taskName}
+                    onChange={handleChange}
                     variant="outlined"
                     size="small"
                 />
@@ -78,12 +101,18 @@ const EditTaskForm: React.FC<Props> = ({task, updateTask}) => {
                 <TextField
                     id="taskDescription"
                     {...register("taskDescription",{
-                        required: "This is required"
+                        required: "This is required",
+                        pattern: {
+                            value: /^[^\s]+(?:$|.*[^\s]+$)/,
+                            message: `Entered value can not start/end or 
+                                contain only white spacing`
+                        },
                     })}
                     label="Task Description"
                     className={classes.textArea}
                     variant="outlined"
                     defaultValue={task.taskDescription}
+                    onChange={handleChange}
                     multiline
                     rows={2}
                 />

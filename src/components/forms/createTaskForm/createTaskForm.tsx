@@ -2,9 +2,7 @@ import React, {useState} from "react";
 import { useForm } from "react-hook-form";
 
 import { Button, TextField } from "@material-ui/core";
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-
-import { format } from "date-fns";
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 import LocalstorageService from
     "../../../services/localStorageService/localstorage.service";
@@ -13,31 +11,32 @@ interface Props {
     addTask: AddTask;
 }
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme:Theme) =>
     createStyles({
         form: {
             display: 'flex',
             justifyContent: 'center',
-            paddingTop: '40px'
+            paddingTop: theme.spacing(5)
         },
         createButton: {
             display: 'flex',
             justifyContent: 'center',
-            paddingTop: '40px'
+            paddingTop: theme.spacing(5)
         },
         button: {
-            marginTop: '15px',
+            marginTop: theme.spacing(3),
         },
         textArea: {
-            marginTop: '15px',
+            marginTop: theme.spacing(3),
         },
         wrapper: {
             display: 'flex',
             flexDirection: 'column',
         },
         error: {
-            padding: '5px 15px',
-            color: 'red'
+            padding: theme.spacing(1, 4),
+            color: 'red',
+            maxWidth: 200
         }
     }),
 );
@@ -59,7 +58,7 @@ const CreateTaskForm: React.FC<Props> = ({addTask}) => {
     const onSubmit = handleSubmit((data: Task) => {
         id++;
         data.id = id;
-        data.createdAt = format(new Date(), 'd-MM-yyyy, HH:mm:ss');
+        data.createdAt = new Date();
         LocalstorageService.setCurrentId(id);
         addTask(data);
         reset();
@@ -90,7 +89,12 @@ const CreateTaskForm: React.FC<Props> = ({addTask}) => {
                     <TextField
                         id="taskName"
                         {...register("taskName", {
-                            required: "This is required"
+                            required: "This is required",
+                            pattern: {
+                                value: /^[^\s]+(?:$|.*[^\s]+$)/,
+                                message: `Entered value can not start/end or 
+                                contain only white spacing`
+                            },
                         })}
                         label="Task Name"
                         variant="outlined"
@@ -104,7 +108,12 @@ const CreateTaskForm: React.FC<Props> = ({addTask}) => {
                     <TextField
                         id="taskDescription"
                         {...register("taskDescription", {
-                            required: "This is required"
+                            required: "This is required",
+                            pattern: {
+                                value: /^[^\s]+(?:$|.*[^\s]+$)/,
+                                message: `Entered value can not start/end or 
+                                contain only white spacing`
+                            },
                         })}
                         label="Task Description"
                         className={classes.textArea}

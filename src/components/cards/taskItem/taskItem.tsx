@@ -15,6 +15,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import clsx from "clsx";
 
 import EditTaskForm from "../../forms/editTaskForm/editTaskForm";
+import format from "date-fns/format";
+import { parseISO } from "date-fns";
 
 interface Props {
     task: Task;
@@ -27,13 +29,13 @@ const useStyles = makeStyles((theme:Theme) =>
         container: {
             display: 'flex',
             justifyContent: 'center',
-            margin: '10px 0',
-            width: '500px',
+            margin: theme.spacing(3, 0),
+            width: 500,
             flexDirection: 'column'
         },
         expand: {
             transform: 'rotate(0deg)',
-            marginLeft: 'auto',
+            margin: theme.spacing(0, 0, 0,'auto'),
             transition: theme.transitions.create('transform', {
                 duration: theme.transitions.duration.shortest,
             }),
@@ -42,11 +44,11 @@ const useStyles = makeStyles((theme:Theme) =>
             transform: 'rotate(180deg)',
         },
         cardContent: {
-            padding: '0 16px',
-            margin: '20px 0',
-            width: '500px',
+            padding:  theme.spacing(0, 2),
+            margin:  theme.spacing(3, 0),
+            width: 500,
             '&:last-child': {
-                padding: '0 16px',
+                padding:  theme.spacing(0, 2),
             }
         }
     }),
@@ -74,6 +76,10 @@ const TaskItem: React.FC<Props> = ({task, deleteTask, updateTask}) => {
         setIsEdit(false);
     };
 
+    const convertDate: (date: Date) => string = (date: Date) => {
+        return format(parseISO(date.toString()), 'dd-LL-yyyy, HH:mm:ss');
+    };
+
     return (
         <>
             {isEdit &&
@@ -85,7 +91,8 @@ const TaskItem: React.FC<Props> = ({task, deleteTask, updateTask}) => {
                         title={`Task Name: ${task.taskName}`}
                         subheader={`${task.updatedAt ?
                             'Updated At:' : 'Created At:'} 
-                            ${task.updatedAt || task.createdAt}`}
+                            ${convertDate(task.updatedAt ||
+                            task.createdAt)}`}
                         action={
                             <IconButton
                                 className={clsx(classes.expand, {

@@ -1,5 +1,12 @@
 {
   "name": "test_task",
+  "jest": {
+    "verbose": true,
+    "collectCoverage": true,
+    "setupFilesAfterEnv": [
+      "@testing-library/jest-dom/extend-expect"
+    ]
+  },
   "version": "1.0.0",
   "description": "First task",
   "main": "index.js",
@@ -8,7 +15,8 @@
     "build": "cross-env NODE_ENV=production webpack",
     "start": "serve dist",
     "eslint": "eslint",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "repository": {
     "type": "git",
