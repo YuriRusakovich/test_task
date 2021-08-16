@@ -101,6 +101,7 @@ const TaskItem: React.FC<Props> = ({task, deleteTask, updateTask}) => {
                                 onClick={handleExpandClick}
                                 aria-expanded={expanded}
                                 aria-label="show more"
+                                data-testid={`showMore-${task.id}`}
                             >
                                 <ExpandMoreIcon />
                             </IconButton>
@@ -118,10 +119,12 @@ const TaskItem: React.FC<Props> = ({task, deleteTask, updateTask}) => {
                             </Typography>
                         </CardContent>
                         <CardActions disableSpacing>
-                            <IconButton onClick={handleDeleteTask}>
+                            <IconButton onClick={handleDeleteTask}
+                                data-testid={`delete-${task.id}`}>
                                 <DeleteIcon />
                             </IconButton>
-                            <IconButton onClick={handleIsEditChange}>
+                            <IconButton onClick={handleIsEditChange}
+                                data-testid={`edit-${task.id}`}>
                                 <EditIcon />
                             </IconButton>
                         </CardActions>

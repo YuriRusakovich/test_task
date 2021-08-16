@@ -54,9 +54,6 @@ const EditTaskForm: React.FC<Props> = ({task, updateTask}) => {
     });
 
     const onSubmit = handleSubmit((data: Task) => {
-        data.taskName = data.taskName ? data.taskName : task.taskName;
-        data.taskDescription = data.taskDescription ?
-            data.taskDescription : task.taskDescription;
         data.id = task.id;
         data.createdAt = task.createdAt;
         data.updatedAt = new Date();
@@ -75,7 +72,8 @@ const EditTaskForm: React.FC<Props> = ({task, updateTask}) => {
     return (
         <form className={classes.form}
             onSubmit={onSubmit}
-            autoComplete="off">
+            autoComplete="off"
+            data-testid={`editForm-${task.id}`}>
             <div className={classes.wrapper}>
                 <TextField
                     id="taskName"

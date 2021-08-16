@@ -3,6 +3,9 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { HotModuleReplacementPlugin } = require("webpack");
 const TerserWebpackPlugin = require("terser-webpack-plugin");
 const EsLintPlugin = require("eslint-webpack-plugin");
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+    .BundleAnalyzerPlugin;
+
 
 const isProd = process.env.NODE_ENV === "production";
 
@@ -38,6 +41,7 @@ const config = {
         new EsLintPlugin({
            extensions: [".js", ".jsx", ".ts", ".tsx"],
         }),
+        new BundleAnalyzerPlugin(),
     ],
 };
 

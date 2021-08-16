@@ -58,7 +58,7 @@ const TasksList: React.FC<Props> = ({tasks, deleteTask, updateTask}) => {
 
     return (
         <div className={classes.wrapper}>
-            <List className={classes.listWrapper}>
+            <List className={classes.listWrapper} data-testid="list">
                 {tasksList}
             </List>
         </div>
