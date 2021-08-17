@@ -1,12 +1,5 @@
 {
   "name": "test_task",
-  "jest": {
-    "verbose": true,
-    "collectCoverage": true,
-    "setupFilesAfterEnv": [
-      "@testing-library/jest-dom/extend-expect"
-    ]
-  },
   "version": "1.0.0",
   "description": "First task",
   "main": "index.js",
@@ -14,7 +7,8 @@
     "dev": "cross-env NODE_ENV=development webpack serve",
     "build": "cross-env NODE_ENV=production webpack",
     "start": "serve dist",
-    "eslint": "eslint",
+    "lint": "eslint --ext .tsx,.ts src __tests__",
+    "lint:fix": "eslint --fix --ext .tsx,.ts src __tests__",
     "test": "jest",
     "test:watch": "jest --watch"
   },

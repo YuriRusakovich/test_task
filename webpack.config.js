@@ -19,7 +19,11 @@ const config = {
         filename: "bundle.js",
     },
     resolve: {
-        extensions: [".js", ".jsx", ".ts", ".tsx"],
+        alias: {
+            "@components": resolve(__dirname, './src/components'),
+            "@services": resolve(__dirname, './src/services')
+        },
+        extensions: [".js", ".jsx", ".ts", ".tsx"]
     },
     module: {
         rules: [

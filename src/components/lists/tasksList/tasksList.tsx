@@ -1,11 +1,7 @@
 import React from "react";
-
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
-
-import TaskItem from "../../cards/taskItem/taskItem";
-
-import CompareDatesService from
-    "../../../services/compareDatesService/compareDates.service";
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import TaskItem from "@components/items/taskItem/taskItem";
+import CompareDates from "@services/compareDates/compareDates";
 import { List } from "@material-ui/core";
 
 interface Props {
@@ -44,17 +40,15 @@ const useStyles = makeStyles((theme:Theme) =>
 const TasksList: React.FC<Props> = ({tasks, deleteTask, updateTask}) => {
     const classes = useStyles();
 
-    const tasksList = tasks.sort(CompareDatesService.compareTasks)
-        .map((task: Task) => {
-            return (
-                <TaskItem
-                    key={task.id}
-                    task={task}
-                    deleteTask={deleteTask}
-                    updateTask={updateTask}
-                />
-            );
-        });
+    const tasksList = tasks.sort(CompareDates.compareTasks)
+        .map((task: Task) => (
+            <TaskItem
+                key={task.id}
+                task={task}
+                deleteTask={deleteTask}
+                updateTask={updateTask}
+            />
+        ));
 
     return (
         <div className={classes.wrapper}>

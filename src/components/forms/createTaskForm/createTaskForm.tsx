@@ -1,11 +1,8 @@
 import React, {useState} from "react";
 import { useForm } from "react-hook-form";
-
 import { Button, TextField } from "@material-ui/core";
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-
-import LocalstorageService from
-    "../../../services/localStorageService/localstorage.service";
+import Storage from "@services/storage/storage";
 
 interface Props {
     addTask: AddTask;
@@ -46,8 +43,6 @@ const CreateTaskForm: React.FC<Props> = ({addTask}) => {
 
     const [showForm, setShowForm] = useState(false);
 
-    let id: number = LocalstorageService.getCurrentId();
-
     const {
         register,
         handleSubmit,
@@ -56,10 +51,11 @@ const CreateTaskForm: React.FC<Props> = ({addTask}) => {
     } = useForm<Task>();
 
     const onSubmit = handleSubmit((data: Task) => {
+        let id: number = Storage.getCurrentId();
         id++;
         data.id = id;
         data.createdAt = new Date();
-        LocalstorageService.setCurrentId(id);
+        Storage.setCurrentId(id);
         addTask(data);
         reset();
         setShowForm(false);

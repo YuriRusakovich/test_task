@@ -1,35 +1,34 @@
 import React, {useState} from "react";
-
-import CreateTaskForm from "./forms/createTaskForm/createTaskForm";
-import TasksList from "./lists/tasksList/tasksList";
-
-import LocalstorageService from
-    "../services/localStorageService/localstorage.service";
+import CreateTaskForm from "@components/forms/createTaskForm/createTaskForm";
+import TasksList from "@components/lists/tasksList/tasksList";
+import Storage from "@services/storage/storage";
 
 const App: React.FC = () => {
-    const taskList: Task[] = LocalstorageService.getTasks();
+    const taskList: Task[] = Storage.getTasks();
 
     const [tasks, setTasks] = useState(taskList);
 
+    const updateData: (value: any) => void = (value) => {
+        Storage.setTasks(value);
+        setTasks(value);
+    };
+
     const addTask: AddTask = (task: Task) => {
-        LocalstorageService.setTasks([...tasks, task]);
-        setTasks([...tasks, task]);
+        updateData([...tasks, task]);
     };
 
     const updateTask: UpdateTask = (task: Task) => {
         const updatedTasks = tasks.map((taskItem:Task) => {
             return taskItem.id === task.id ? task : taskItem;
         });
-        LocalstorageService.setTasks([...updatedTasks]);
-        setTasks([...updatedTasks]);
+        updateData([...updatedTasks]);
     };
 
     const deleteTask: DeleteTask = (task: Task) => {
         const updatedTasks = tasks.filter((taskItem: Task) => {
             return taskItem.id !== task.id;
         });
-        LocalstorageService.setTasks([...updatedTasks]);
-        setTasks([...updatedTasks]);
+        updateData([...updatedTasks]);
     };
 
     return (

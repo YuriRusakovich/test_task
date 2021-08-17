@@ -1,8 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-
 import { Button, TextField } from "@material-ui/core";
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 interface Props {
     task: Task;
@@ -42,7 +41,8 @@ const useStyles = makeStyles((theme:Theme) =>
 const EditTaskForm: React.FC<Props> = ({task, updateTask}) => {
     const classes = useStyles();
 
-    const { register,
+    const {
+        register,
         handleSubmit,
         formState: {errors},
         setValue,
@@ -54,10 +54,7 @@ const EditTaskForm: React.FC<Props> = ({task, updateTask}) => {
     });
 
     const onSubmit = handleSubmit((data: Task) => {
-        data.id = task.id;
-        data.createdAt = task.createdAt;
-        data.updatedAt = new Date();
-        updateTask(data);
+        updateTask({...task, ...data, updatedAt: new Date()});
     });
 
     const handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void =
