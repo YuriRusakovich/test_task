@@ -1,4 +1,4 @@
-import CheckData from '@services/checkData/checkData';
+import CheckData from '@services/checkData';
 
 class Storage {
     static getTasks(): Task[] {

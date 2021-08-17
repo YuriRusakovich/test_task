@@ -13,7 +13,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import clsx from "clsx";
-import EditTaskForm from "@components/forms/editTaskForm/editTaskForm";
+import EditTaskForm from "@components/forms/editTaskForm";
 import format from "date-fns/format";
 import { parseISO } from "date-fns";
 

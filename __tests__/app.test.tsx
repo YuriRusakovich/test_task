@@ -11,7 +11,7 @@ import {
     cleanup
 } from "@testing-library/react";
 import App from "../src/components/app";
-import CompareDates from "../src/services/compareDates/compareDates";
+import CompareDates from "../src/services/compareDates";
 
 beforeEach(() => {
     render(<App />);

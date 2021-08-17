@@ -1,7 +1,7 @@
 import React, {useState} from "react";
-import CreateTaskForm from "@components/forms/createTaskForm/createTaskForm";
-import TasksList from "@components/lists/tasksList/tasksList";
-import Storage from "@services/storage/storage";
+import CreateTaskForm from "@components/forms/createTaskForm";
+import TasksList from "@components/lists/tasksList";
+import Storage from "@services/storage";
 
 const App: React.FC = () => {
     const taskList: Task[] = Storage.getTasks();

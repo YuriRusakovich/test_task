@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import { useForm } from "react-hook-form";
 import { Button, TextField } from "@material-ui/core";
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import Storage from "@services/storage/storage";
+import Storage from "@services/storage";
 
 interface Props {
     addTask: AddTask;
