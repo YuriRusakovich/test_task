@@ -75,7 +75,7 @@ const TaskItem: React.FC<Props> = ({task, deleteTask, updateTask}) => {
         setIsEdit(false);
     };
 
-    const convertDate: (date: Date) => string = (date: Date) => {
+    const convertDate: FormatDate = (date: DateOrString) => {
         return format(parseISO(date.toString()), 'dd-LL-yyyy, HH:mm:ss');
     };
 

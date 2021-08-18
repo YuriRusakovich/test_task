@@ -12,7 +12,7 @@ import {
 import TasksList from "@components/lists/tasksList";
 import CompareDates from "@services/compareDates";
 
-const taskArray: any[] = [
+const taskArray: Task[] = [
     {
         taskName: 'test1',
         taskDescription: 'test1',
@@ -43,10 +43,17 @@ describe('TasksList', () => {
     });
 
     it('should not compare dates if task have no createdAt', () => {
-        const mockTask1 = {
+        const mockTask1: Task = {
+            taskName: 'test',
+            taskDescription: 'test',
+            id: 20,
             createdAt: new Date()
         };
-        const mockTask2 = {
+        const mockTask2: Task = {
+            taskName: 'test2',
+            taskDescription: 'test2',
+            id: 21,
+            createdAt: ''
         };
         const a = CompareDates.compareTasks(mockTask1, mockTask2);
         expect(a).toBe(0);

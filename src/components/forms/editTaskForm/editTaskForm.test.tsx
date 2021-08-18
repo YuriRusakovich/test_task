@@ -12,7 +12,7 @@ import {
 } from "@testing-library/react";
 import EditTaskForm from "@components/forms/editTaskForm";
 
-const task: any = {
+const task: Task = {
     taskName: 'test2',
     taskDescription: 'test2',
     id: 11,

@@ -8,7 +8,7 @@ const App: React.FC = () => {
 
     const [tasks, setTasks] = useState(taskList);
 
-    const updateData: (value: any) => void = (value) => {
+    const updateData: (value: Task[]) => void = (value: Task[]) => {
         Storage.setTasks(value);
         setTasks(value);
     };

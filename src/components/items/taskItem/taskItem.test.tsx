@@ -12,7 +12,7 @@ import {
 } from "@testing-library/react";
 import TaskItem from "@components/items/taskItem";
 
-const task: any = {
+const task: Task = {
     taskName: 'test2',
     taskDescription: 'test2',
     id: 11,
