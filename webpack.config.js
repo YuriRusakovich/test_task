@@ -3,11 +3,45 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { HotModuleReplacementPlugin } = require("webpack");
 const TerserWebpackPlugin = require("terser-webpack-plugin");
 const EsLintPlugin = require("eslint-webpack-plugin");
+const { InjectManifest } = require( 'workbox-webpack-plugin' );
+const CopyPlugin = require( 'copy-webpack-plugin' );
+const Dotenv = require( 'dotenv-webpack' );
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
     .BundleAnalyzerPlugin;
 
 
 const isProd = process.env.NODE_ENV === "production";
+
+const webpackPlugins = [
+    new CopyPlugin( {
+        patterns: [
+            { from: './src/manifest.json', to: '' },
+            { from: './src/assets/images', to: 'assets/images/' }
+        ],
+    } ),
+    new Dotenv( {
+        path: './.env',
+        systemvars: true,
+    } ),
+    new HtmlWebpackPlugin({
+        favicon: false,
+        template: "./src/index.html",
+        filename: "index.html",
+        inject: "body",
+    }),
+    new HotModuleReplacementPlugin(),
+    new EsLintPlugin({
+        extensions: [".js", ".jsx", ".ts", ".tsx"],
+    }),
+    new BundleAnalyzerPlugin(),
+];
+
+if (isProd) {
+    webpackPlugins.push( new InjectManifest( {
+        swSrc: './src/serviceWorker.js',
+        swDest: 'sw.js',
+    } ) );
+}
 
 const config = {
     mode: isProd ? "production" : "development",
@@ -34,19 +68,7 @@ const config = {
             },
         ],
     },
-    plugins: [
-        new HtmlWebpackPlugin({
-            favicon: false,
-            template: "./src/index.html",
-            filename: "index.html",
-            inject: "body",
-        }),
-        new HotModuleReplacementPlugin(),
-        new EsLintPlugin({
-           extensions: [".js", ".jsx", ".ts", ".tsx"],
-        }),
-        new BundleAnalyzerPlugin(),
-    ],
+    plugins: webpackPlugins,
 };
 
 if (isProd) {
@@ -55,7 +77,7 @@ if (isProd) {
     };
 } else {
     config.devServer = {
-        port: 9000,
+        port: 9001,
         open: true,
         hot: true,
         compress: true,

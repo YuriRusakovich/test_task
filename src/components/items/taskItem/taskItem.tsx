@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme:Theme) =>
             display: 'flex',
             justifyContent: 'center',
             margin: theme.spacing(3, 0),
-            width: 500,
+            width: 'auto',
             flexDirection: 'column'
         },
         expand: {
@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme:Theme) =>
         cardContent: {
             padding:  theme.spacing(0, 2),
             margin:  theme.spacing(3, 0),
-            width: 500,
+            width: 'auto',
             '&:last-child': {
                 padding:  theme.spacing(0, 2),
             }

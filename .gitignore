@@ -9,3 +9,5 @@ dist
 
 #Ignore coverage folder
 coverage
+
+.env
